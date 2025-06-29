@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 
@@ -41,11 +42,12 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 relative overflow-hidden ${
+      className={`fixed top-0 left-0 right-0 z-[9999] transition-all duration-300 relative overflow-hidden ${
         scrolled
           ? 'bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-lg'
           : 'bg-transparent'
       }`}
+      style={{ position: 'fixed' }}
     >
       {/* Progress Bar with Blue to Cyan Gradient */}
       <div 
