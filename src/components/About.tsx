@@ -72,9 +72,27 @@ const About = () => {
           setTimeout(() => {
             const skillBar = document.getElementById(`skill-bar-${index}`);
             if (skillBar) {
-              skillBar.classList.add('skill-complete-glow');
+              skillBar.style.position = 'relative';
+              skillBar.style.overflow = 'hidden';
+              
+              // Create glow element
+              const glowElement = document.createElement('div');
+              glowElement.style.position = 'absolute';
+              glowElement.style.top = '0';
+              glowElement.style.left = '-100%';
+              glowElement.style.width = '100%';
+              glowElement.style.height = '100%';
+              glowElement.style.background = 'linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent)';
+              glowElement.style.animation = 'glowSweep 2s ease-in-out';
+              glowElement.style.pointerEvents = 'none';
+              
+              skillBar.appendChild(glowElement);
+              
+              // Remove glow element after animation
               setTimeout(() => {
-                skillBar.classList.remove('skill-complete-glow');
+                if (skillBar.contains(glowElement)) {
+                  skillBar.removeChild(glowElement);
+                }
               }, 2000);
             }
           }, 500);
@@ -163,31 +181,19 @@ const About = () => {
         </div>
       </div>
 
-      <style jsx>{`
-        .skill-complete-glow {
-          position: relative;
-        }
-        
-        .skill-complete-glow::after {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
-          animation: glowSweep 2s ease-in-out;
-        }
-        
-        @keyframes glowSweep {
-          0% {
-            transform: translateX(-100%);
+      {/* CSS Animation for glow effect */}
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          @keyframes glowSweep {
+            0% {
+              transform: translateX(-100%);
+            }
+            100% {
+              transform: translateX(100%);
+            }
           }
-          100% {
-            transform: translateX(100%);
-          }
-        }
-      `}</style>
+        `
+      }} />
     </section>
   );
 };
