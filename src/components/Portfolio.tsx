@@ -6,6 +6,9 @@ const Portfolio = () => {
   const [activeFilter, setActiveFilter] = useState('all');
   const [hoveredButton, setHoveredButton] = useState<string | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [lastInteraction, setLastInteraction] = useState(Date.now());
+  const [showSignalWave, setShowSignalWave] = useState<string | null>(null);
+  const [contentVisible, setContentVisible] = useState(true);
   const sectionRef = useRef<HTMLElement>(null);
   const [scrollY, setScrollY] = useState(0);
   
@@ -93,12 +96,39 @@ const Portfolio = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Signal wave animation timer
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (Date.now() - lastInteraction > 3000 && !hoveredButton) {
+        const randomCategory = categories[Math.floor(Math.random() * categories.length)];
+        setShowSignalWave(randomCategory.id);
+        setTimeout(() => setShowSignalWave(null), 4000);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [lastInteraction, hoveredButton, categories]);
+
   // Mouse tracking for button hover effect
   const handleMouseMove = (e: React.MouseEvent, buttonId: string) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
     setMousePosition({ x, y });
+  };
+
+  const handleFilterChange = (filterId: string) => {
+    setContentVisible(false);
+    setTimeout(() => {
+      setActiveFilter(filterId);
+      setContentVisible(true);
+    }, 300);
+    setLastInteraction(Date.now());
+  };
+
+  const handleButtonInteraction = (buttonId: string) => {
+    setLastInteraction(Date.now());
+    setHoveredButton(buttonId);
   };
 
   return (
@@ -131,9 +161,9 @@ const Portfolio = () => {
           {categories.map((category) => (
             <button
               key={category.id}
-              onClick={() => setActiveFilter(category.id)}
+              onClick={() => handleFilterChange(category.id)}
               onMouseMove={(e) => handleMouseMove(e, category.id)}
-              onMouseEnter={() => setHoveredButton(category.id)}
+              onMouseEnter={() => handleButtonInteraction(category.id)}
               onMouseLeave={() => setHoveredButton(null)}
               className={`relative px-8 py-4 rounded-full font-semibold transition-all duration-500 overflow-hidden group ${
                 activeFilter === category.id
@@ -153,6 +183,15 @@ const Portfolio = () => {
                 />
               )}
               
+              {/* Signal Wave Animation */}
+              {showSignalWave === category.id && (
+                <>
+                  <div className="absolute inset-0 rounded-full border-2 border-blue-500/50 animate-ping" style={{ animationDuration: '4s' }} />
+                  <div className="absolute inset-0 rounded-full border-2 border-purple-500/50 animate-ping" style={{ animationDuration: '4s', animationDelay: '1s' }} />
+                  <div className="absolute inset-0 rounded-full border-2 border-pink-500/50 animate-ping" style={{ animationDuration: '4s', animationDelay: '2s' }} />
+                </>
+              )}
+              
               {/* Active state glow */}
               {activeFilter === category.id && (
                 <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
@@ -161,8 +200,12 @@ const Portfolio = () => {
           ))}
         </div>
 
-        {/* Projects Grid with Parallax */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Projects Grid with Content Fade Animation */}
+        <div 
+          className={`grid md:grid-cols-2 lg:grid-cols-3 gap-8 transition-all duration-300 ${
+            contentVisible ? 'opacity-100 transform translate-y-0' : 'opacity-0 transform translate-y-4'
+          }`}
+        >
           {filteredProjects.map((project, index) => (
             <div
               key={project.id}

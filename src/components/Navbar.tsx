@@ -6,10 +6,16 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDark, setIsDark] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = (scrollTop / docHeight) * 100;
+      
+      setScrolled(scrollTop > 50);
+      setScrollProgress(Math.min(scrollPercent, 100));
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -36,13 +42,46 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 relative overflow-hidden ${
         scrolled
           ? 'bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-lg'
           : 'bg-transparent'
       }`}
     >
-      <div className="max-w-6xl mx-auto px-6">
+      {/* Rainbow Progress Bar */}
+      <div 
+        className="absolute top-0 left-0 h-full transition-all duration-300 ease-out overflow-hidden"
+        style={{ 
+          width: `${scrollProgress}%`,
+          background: 'linear-gradient(90deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080)',
+          backgroundSize: '200% 100%',
+          animation: scrollProgress > 0 ? 'rainbowMove 3s linear infinite' : 'none',
+        }}
+      >
+        {/* Shine effect within progress bar */}
+        {scrollProgress > 0 && (
+          <div 
+            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+            style={{
+              animation: 'shineSweep 5s ease-in-out infinite',
+              transform: 'translateX(-100%)',
+            }}
+          />
+        )}
+      </div>
+
+      {/* Global shine effect when no progress */}
+      {scrollProgress === 0 && (
+        <div 
+          className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/20 to-transparent"
+          style={{
+            animation: 'globalShine 5s ease-in-out infinite',
+            transform: 'translateX(-100%)',
+          }}
+        />
+      )}
+
+      <div className="max-w-6xl mx-auto px-6 relative z-10">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <a
@@ -51,7 +90,7 @@ const Navbar = () => {
               e.preventDefault();
               scrollToSection('#home');
             }}
-            className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 hover:scale-105 transition-transform duration-300"
+            className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 hover:scale-105 transition-transform duration-300 relative z-10"
           >
             JD
           </a>
@@ -66,7 +105,7 @@ const Navbar = () => {
                   e.preventDefault();
                   scrollToSection(item.href);
                 }}
-                className="relative text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-300 group"
+                className="relative text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-300 group z-10"
               >
                 {item.name}
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 group-hover:w-full transition-all duration-300"></span>
@@ -76,7 +115,7 @@ const Navbar = () => {
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-300"
+              className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-300 relative z-10"
               aria-label="Toggle theme"
             >
               {isDark ? (
@@ -91,7 +130,7 @@ const Navbar = () => {
           <div className="md:hidden flex items-center space-x-4">
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-300"
+              className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-300 relative z-10"
               aria-label="Toggle theme"
             >
               {isDark ? (
@@ -103,7 +142,7 @@ const Navbar = () => {
             
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300"
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300 relative z-10"
               aria-label="Toggle menu"
             >
               {isOpen ? (
@@ -121,7 +160,7 @@ const Navbar = () => {
             isOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'
           }`}
         >
-          <div className="py-4 space-y-2 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md rounded-lg mt-2 border border-gray-200 dark:border-gray-700">
+          <div className="py-4 space-y-2 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md rounded-lg mt-2 border border-gray-200 dark:border-gray-700 relative z-10">
             {navItems.map((item) => (
               <a
                 key={item.name}
@@ -138,6 +177,27 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+
+      {/* CSS Animations */}
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          @keyframes rainbowMove {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+          }
+          
+          @keyframes shineSweep {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+          }
+          
+          @keyframes globalShine {
+            0% { transform: translateX(-100%); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(100%); opacity: 0; }
+          }
+        `
+      }} />
     </nav>
   );
 };
