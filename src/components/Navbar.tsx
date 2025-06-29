@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 
@@ -48,14 +47,11 @@ const Navbar = () => {
           : 'bg-transparent'
       }`}
     >
-      {/* Rainbow Progress Bar */}
+      {/* Progress Bar with Blue to Cyan Gradient */}
       <div 
-        className="absolute top-0 left-0 h-full transition-all duration-300 ease-out overflow-hidden"
+        className="absolute top-0 left-0 h-full transition-all duration-300 ease-out bg-gradient-to-r from-blue-500 to-cyan-500"
         style={{ 
           width: `${scrollProgress}%`,
-          background: 'linear-gradient(90deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080)',
-          backgroundSize: '200% 100%',
-          animation: scrollProgress > 0 ? 'rainbowMove 3s linear infinite' : 'none',
         }}
       >
         {/* Shine effect within progress bar */}
@@ -181,11 +177,6 @@ const Navbar = () => {
       {/* CSS Animations */}
       <style dangerouslySetInnerHTML={{
         __html: `
-          @keyframes rainbowMove {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 200% 50%; }
-          }
-          
           @keyframes shineSweep {
             0% { transform: translateX(-100%); }
             100% { transform: translateX(100%); }
