@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 import DigitalClock from './DigitalClock';
@@ -61,9 +60,9 @@ const Navbar = () => {
         backdropFilter: 'blur(20px) saturate(180%)',
       }}
     >
-      {/* Progress Bar */}
+      {/* Progress Bar - Fixed rectangular shape */}
       <div 
-        className="absolute top-0 left-0 h-full transition-all duration-300 ease-out bg-gradient-to-r from-blue-500 to-cyan-500 rounded-r-full"
+        className="absolute bottom-0 left-0 h-1 transition-all duration-300 ease-out bg-gradient-to-r from-blue-500 to-cyan-500 overflow-hidden"
         style={{ 
           width: `${scrollProgress}%`,
           opacity: scrollProgress > 0 ? 0.8 : 0,
@@ -71,10 +70,11 @@ const Navbar = () => {
       >
         {scrollProgress > 0 && (
           <div 
-            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent rounded-r-full"
+            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"
             style={{
-              animation: 'shineSweep 5s ease-in-out infinite',
+              animation: 'progressShine 2s ease-in-out infinite',
               transform: 'translateX(-100%)',
+              width: '100%',
             }}
           />
         )}
@@ -200,7 +200,7 @@ const Navbar = () => {
       {/* CSS Animations */}
       <style dangerouslySetInnerHTML={{
         __html: `
-          @keyframes shineSweep {
+          @keyframes progressShine {
             0% { transform: translateX(-100%); }
             100% { transform: translateX(100%); }
           }
