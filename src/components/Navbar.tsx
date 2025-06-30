@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Sun, Moon } from 'lucide-react';
+import DigitalClock from './DigitalClock';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,6 +31,7 @@ const Navbar = () => {
   const navItems = [
     { name: 'Home', href: '#home' },
     { name: 'About', href: '#about' },
+    { name: 'Background', href: '#background' },
     { name: 'Portfolio', href: '#portfolio' },
     { name: 'Contact', href: '#contact' }
   ];
@@ -44,21 +46,22 @@ const Navbar = () => {
     <nav
       className={`fixed top-0 left-0 right-0 z-[9999] transition-all duration-500 relative overflow-hidden ${
         scrolled
-          ? 'bg-white/10 dark:bg-gray-900/10 backdrop-blur-xl border-b border-white/20 dark:border-gray-700/20 shadow-2xl'
-          : 'bg-white/5 dark:bg-gray-900/5 backdrop-blur-sm'
+          ? 'bg-white/5 dark:bg-gray-900/5 backdrop-blur-2xl border-b border-white/10 dark:border-gray-700/10 shadow-2xl'
+          : 'bg-white/2 dark:bg-gray-900/2 backdrop-blur-xl'
       }`}
       style={{ 
         position: 'fixed',
-        borderRadius: scrolled ? '0 0 24px 24px' : '0',
+        borderRadius: scrolled ? '0 0 32px 32px' : '0 0 24px 24px',
         background: scrolled 
-          ? 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)'
-          : 'linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%)',
+          ? 'radial-gradient(ellipse at top, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%)'
+          : 'radial-gradient(ellipse at top, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%)',
         boxShadow: scrolled 
-          ? '0 8px 40px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.2)'
-          : '0 4px 20px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.1)'
+          ? '0 16px 60px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.1), 0 0 0 1px rgba(255,255,255,0.05)'
+          : '0 8px 40px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.08), 0 0 0 1px rgba(255,255,255,0.03)',
+        backdropFilter: 'blur(20px) saturate(180%)',
       }}
     >
-      {/* Progress Bar with Blue to Cyan Gradient */}
+      {/* Progress Bar */}
       <div 
         className="absolute top-0 left-0 h-full transition-all duration-300 ease-out bg-gradient-to-r from-blue-500 to-cyan-500 rounded-r-full"
         style={{ 
@@ -66,7 +69,6 @@ const Navbar = () => {
           opacity: scrollProgress > 0 ? 0.8 : 0,
         }}
       >
-        {/* Shine effect within progress bar */}
         {scrollProgress > 0 && (
           <div 
             className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent rounded-r-full"
@@ -78,7 +80,6 @@ const Navbar = () => {
         )}
       </div>
 
-      {/* Global shine effect when no progress */}
       {scrollProgress === 0 && (
         <div 
           className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/10 to-transparent"
@@ -89,7 +90,7 @@ const Navbar = () => {
         />
       )}
 
-      <div className="max-w-6xl mx-auto px-6 relative z-10">
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <a
@@ -102,6 +103,11 @@ const Navbar = () => {
           >
             JD
           </a>
+
+          {/* Digital Clock - Center */}
+          <div className="hidden lg:block">
+            <DigitalClock />
+          </div>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
@@ -136,6 +142,11 @@ const Navbar = () => {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center space-x-4">
+            {/* Mobile Digital Clock */}
+            <div className="lg:hidden">
+              <DigitalClock />
+            </div>
+            
             <button
               onClick={toggleTheme}
               className="p-2 rounded-full bg-white/20 dark:bg-gray-700/20 hover:bg-white/30 dark:hover:bg-gray-600/30 transition-all duration-300 relative z-10 backdrop-blur-sm border border-white/20 dark:border-gray-600/20"
@@ -165,7 +176,7 @@ const Navbar = () => {
         {/* Mobile Menu */}
         <div
           className={`md:hidden overflow-hidden transition-all duration-300 ${
-            isOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'
+            isOpen ? 'max-h-80 opacity-100' : 'max-h-0 opacity-0'
           }`}
         >
           <div className="py-4 space-y-2 bg-white/10 dark:bg-gray-900/10 backdrop-blur-xl rounded-2xl mt-2 border border-white/20 dark:border-gray-700/20 relative z-10 shadow-xl">
