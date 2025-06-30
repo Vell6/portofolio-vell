@@ -4,7 +4,7 @@ import { School, Briefcase, Calendar, MapPin, GraduationCap, Award, Building2, H
 
 const Background = () => {
   const [visibleItems, setVisibleItems] = useState<number[]>([]);
-  const [typingItems, setTypingItems] = useState<number[]>([]);
+  const [typingStates, setTypingStates] = useState<{ [key: number]: { [field: string]: string } }>({});
   const timelineRef = useRef<HTMLDivElement>(null);
 
   const backgroundData = [
@@ -80,15 +80,20 @@ const Background = () => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const index = Number(entry.target.getAttribute('data-index'));
-            setVisibleItems(prev => [...prev, index]);
-            // Start typing animation after slide in
-            setTimeout(() => {
-              setTypingItems(prev => [...prev, index]);
-            }, 300);
+            setVisibleItems(prev => {
+              if (!prev.includes(index)) {
+                return [...prev, index];
+              }
+              return prev;
+            });
           } else {
             const index = Number(entry.target.getAttribute('data-index'));
             setVisibleItems(prev => prev.filter(i => i !== index));
-            setTypingItems(prev => prev.filter(i => i !== index));
+            setTypingStates(prev => {
+              const newStates = { ...prev };
+              delete newStates[index];
+              return newStates;
+            });
           }
         });
       },
@@ -101,18 +106,28 @@ const Background = () => {
     return () => observer.disconnect();
   }, []);
 
-  const TypewriterText = ({ text, isVisible, delay = 0 }: { text: string, isVisible: boolean, delay?: number }) => {
-    const [displayText, setDisplayText] = useState('');
-    
+  const TypewriterText = ({ text, isVisible, field, index, delay = 0 }: { 
+    text: string, 
+    isVisible: boolean, 
+    field: string,
+    index: number,
+    delay?: number 
+  }) => {
     useEffect(() => {
-      if (isVisible) {
-        let currentIndex = 0;
+      if (isVisible && !typingStates[index]?.[field]) {
         const timer = setTimeout(() => {
+          let currentIndex = 0;
           const typeTimer = setInterval(() => {
-            if (currentIndex <= text.length) {
-              setDisplayText(text.slice(0, currentIndex));
-              currentIndex++;
-            } else {
+            setTypingStates(prev => ({
+              ...prev,
+              [index]: {
+                ...prev[index],
+                [field]: text.slice(0, currentIndex)
+              }
+            }));
+            currentIndex++;
+            
+            if (currentIndex > text.length) {
               clearInterval(typeTimer);
             }
           }, 30);
@@ -121,12 +136,10 @@ const Background = () => {
         }, delay);
         
         return () => clearTimeout(timer);
-      } else {
-        setDisplayText('');
       }
-    }, [text, isVisible, delay]);
+    }, [text, isVisible, field, index, delay]);
 
-    return <span>{displayText}</span>;
+    return <span>{typingStates[index]?.[field] || ''}</span>;
   };
 
   return (
@@ -142,15 +155,15 @@ const Background = () => {
         </div>
 
         <div className="relative" ref={timelineRef}>
-          {/* Timeline line with connecting dots */}
-          <div className="absolute left-8 top-0 bottom-0 w-2 hidden md:block">
+          {/* Timeline line with connecting dots and flowing lines */}
+          <div className="absolute left-8 top-0 bottom-0 w-4 hidden md:block">
             {/* Main timeline line */}
-            <div className="w-full h-full bg-gradient-to-b from-white/20 via-blue-500/30 to-purple-600/30 backdrop-blur-xl rounded-full border border-white/20 relative overflow-hidden">
-              {/* Animated light sweep */}
+            <div className="w-full h-full bg-white/10 backdrop-blur-xl rounded-full border border-white/20 relative overflow-hidden">
+              {/* Animated flowing light sweep */}
               <div 
-                className="absolute inset-0 bg-gradient-to-b from-transparent via-white/50 to-transparent w-full h-8"
+                className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-400/40 to-transparent w-full h-12 rounded-full"
                 style={{
-                  animation: 'timelineSweep 3s ease-in-out infinite',
+                  animation: 'liquidFlow 3s ease-in-out infinite',
                   transform: 'translateY(-100%)',
                 }}
               />
@@ -160,7 +173,7 @@ const Background = () => {
             {backgroundData.map((_, index) => (
               <div
                 key={index}
-                className="absolute w-4 h-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full border-2 border-white/30 backdrop-blur-sm"
+                className="absolute w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full border-2 border-white/30 backdrop-blur-sm shadow-lg"
                 style={{
                   top: `${(index * 100) / (backgroundData.length - 1)}%`,
                   left: '50%',
@@ -168,6 +181,28 @@ const Background = () => {
                   animation: `dotPulse 2s ease-in-out infinite ${index * 0.2}s`,
                 }}
               />
+            ))}
+
+            {/* Connecting flowing lines between icons */}
+            {backgroundData.slice(0, -1).map((_, index) => (
+              <div
+                key={`line-${index}`}
+                className="absolute w-2 bg-white/10 backdrop-blur-xl rounded-full border border-white/10 overflow-hidden"
+                style={{
+                  top: `${((index + 0.5) * 100) / (backgroundData.length - 1)}%`,
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  height: `${100 / (backgroundData.length - 1)}%`,
+                }}
+              >
+                <div 
+                  className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-300/50 to-transparent w-full h-8 rounded-full"
+                  style={{
+                    animation: `liquidFlow 3s ease-in-out infinite ${index * 0.3}s`,
+                    transform: 'translateY(-100%)',
+                  }}
+                />
+              </div>
             ))}
           </div>
 
@@ -203,14 +238,18 @@ const Background = () => {
                         <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-2 md:mb-0 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
                           <TypewriterText 
                             text={item.title} 
-                            isVisible={typingItems.includes(index)}
+                            isVisible={visibleItems.includes(index)}
+                            field="title"
+                            index={index}
                             delay={200}
                           />
                         </h3>
                         <div className="text-sm text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300 font-semibold">
                           <TypewriterText 
                             text={item.date} 
-                            isVisible={typingItems.includes(index)}
+                            isVisible={visibleItems.includes(index)}
+                            field="date"
+                            index={index}
                             delay={400}
                           />
                         </div>
@@ -226,7 +265,9 @@ const Background = () => {
                         <span className="font-medium">
                           <TypewriterText 
                             text={item.location} 
-                            isVisible={typingItems.includes(index)}
+                            isVisible={visibleItems.includes(index)}
+                            field="location"
+                            index={index}
                             delay={600}
                           />
                         </span>
@@ -240,7 +281,9 @@ const Background = () => {
                       style={{ transitionDelay: '200ms' }}>
                         <TypewriterText 
                           text={item.description} 
-                          isVisible={typingItems.includes(index)}
+                          isVisible={visibleItems.includes(index)}
+                          field="description"
+                          index={index}
                           delay={800}
                         />
                       </p>
@@ -258,10 +301,11 @@ const Background = () => {
 
       <style dangerouslySetInnerHTML={{
         __html: `
-          @keyframes timelineSweep {
+          @keyframes liquidFlow {
             0% { transform: translateY(-100%); opacity: 0; }
-            50% { opacity: 1; }
-            100% { transform: translateY(100%); opacity: 0; }
+            20% { opacity: 0.8; }
+            80% { opacity: 0.8; }
+            100% { transform: translateY(200%); opacity: 0; }
           }
           
           @keyframes dotPulse {

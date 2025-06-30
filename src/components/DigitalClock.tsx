@@ -73,24 +73,22 @@ const DigitalClock = () => {
       />
       
       <div className="relative z-10 flex flex-col items-center">
-        {/* Day name with fade animation */}
+        {/* Day name with fade animation - removed glossy background */}
         <div 
-          className={`text-xs font-medium text-white/80 backdrop-blur-sm transition-all duration-500 ease-in-out ${
+          className={`text-xs font-medium text-white/90 transition-all duration-500 ease-in-out ${
             showDay 
               ? 'opacity-100 translate-y-0 max-h-6 mb-1' 
               : 'opacity-0 -translate-y-2 max-h-0 mb-0'
           }`}
           style={{
-            background: 'linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%)',
-            borderRadius: '6px',
             padding: showDay ? '2px 8px' : '0 8px',
           }}
         >
           {currentDay}
         </div>
 
-        {/* Time display */}
-        <div className="text-lg font-mono font-bold text-white/90 backdrop-blur-sm flex items-center space-x-1">
+        {/* Time display - removed backdrop-blur-sm */}
+        <div className="text-lg font-mono font-bold text-white/90 flex items-center space-x-1">
           <TimeDigit current={currentTime.hours[0]} previous={previousTime.hours[0]} index={0} />
           <TimeDigit current={currentTime.hours[1]} previous={previousTime.hours[1]} index={1} />
           <span className="animate-pulse text-blue-400/80">:</span>
