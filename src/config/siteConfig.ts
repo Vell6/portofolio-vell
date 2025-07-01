@@ -21,65 +21,66 @@ export const siteConfig = {
 
   // Hero Section
   hero: {
-    name: "John Doe",
+    name: "Marvel",
     titles: [
-      "Full Stack Developer",
-      "UI/UX Designer", 
-      "Creative Thinker",
-      "Problem Solver"
+      "Pengembang Tumpukan Penuh",
+      "Desainer UI/UX", 
+      "Pemikir Kreatif",
+      "Pemecah Masalah",
+      "pengembang handal"
     ],
-    description: "Passionate about creating amazing digital experiences through clean code and innovative design. Let's build something incredible together.",
-    profileImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
+    description: "Bersemangat menciptakan pengalaman digital yang menakjubkan melalui kode yang bersih dan desain yang inovatif. Mari kita membangun sesuatu yang luar biasa bersama-sama.",
+    profileImage: "https://files.catbox.moe/cnsa33.jpg",
     buttons: {
       downloadCV: "Download CV",
-      viewWork: "View My Work"
+      viewWork: "Lihat Pekerjaan Saya"
     }
   },
 
   // About Section
   about: {
-    title: "About Me",
-    description: "I'm a passionate developer with 5+ years of experience creating digital solutions that make a difference. I love turning complex problems into simple, beautiful designs.",
+    title: "Tentang Saya",
+    description: "Saya seorang pengembang yang bersemangat dengan pengalaman lebih dari 5 tahun dalam menciptakan solusi digital yang membawa perubahan. Saya suka mengubah masalah yang rumit menjadi desain yang sederhana dan indah.",
     profileImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
-    skillsTitle: "My Skills",
+    skillsTitle: "Keahlian Saya",
     skills: [
       {
-        name: "Frontend Development",
-        percentage: 95,
+        name: "Pengembangan Frontend",
+        percentage: 80,
         color: "from-blue-500 to-cyan-500"
       },
       {
-        name: "Backend Development", 
-        percentage: 88,
+        name: "Pengembangan Backend", 
+        percentage: 1,
         color: "from-green-500 to-emerald-500"
       },
       {
-        name: "UI/UX Design",
-        percentage: 92,
+        name: "Desain UI/UX",
+        percentage: 99,
         color: "from-purple-500 to-pink-500"
       },
       {
-        name: "Mobile Development",
-        percentage: 85,
+        name: "Pengembangan Seluler",
+        percentage: 56,
         color: "from-orange-500 to-red-500"
       }
     ],
     features: [
       {
-        title: "Clean Code",
-        description: "Writing maintainable, scalable, and efficient code following best practices."
+        title: "Kode Bersih",
+        description: "Menulis kode yang dapat dipelihara, dapat diskalakan, dan efisien mengikuti praktik terbaik."
       },
       {
-        title: "Creative Design", 
-        description: "Crafting beautiful and intuitive user interfaces with attention to detail."
+        title: "Desain Kreatif", 
+        description: "Membuat antarmuka pengguna yang indah dan intuitif dengan memperhatikan detail."
       },
       {
-        title: "Performance",
-        description: "Optimizing applications for speed, SEO, and exceptional user experience."
+        title: "Pertunjukan",
+        description: "performa aplikasi untuk kecepatan, SEO, dan pengalaman pengguna yang luar biasa."
       },
       {
-        title: "Collaboration",
-        description: "Working effectively in teams and communicating ideas clearly."
+        title: "Kolaborasi",
+        description: "Bekerja secara efektif dalam tim dan mengomunikasikan gagasan dengan jelas."
       }
     ]
   },
