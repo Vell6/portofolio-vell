@@ -20,10 +20,10 @@ const Footer = () => {
           {/* Brand */}
           <div className="space-y-4">
             <h3 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
-              John Doe
+              Marvel
             </h3>
             <p className="text-gray-400 leading-relaxed">
-              Passionate developer creating amazing digital experiences through clean code and innovative design.
+              Pengembang yang bersemangat menciptakan pengalaman digital yang menakjubkan melalui kode yang bersih dan desain yang inovatif.
             </p>
           </div>
 
