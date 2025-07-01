@@ -10,34 +10,34 @@ const Background = () => {
   const backgroundData = [
     {
       icon: Calendar,
-      title: 'Kelahiran',
-      date: '15 Januari 1995',
-      location: 'Jakarta, Indonesia',
-      description: 'Lahir di Jakarta sebagai anak pertama dari dua bersaudara.',
+      title: 'Lahir',
+      date: '26 Juni 2009',
+      location: 'Kalimantan Barat, Indonesia',
+      description: 'Lahir di Kalimantan Barat sebagai anak kedua dari dua bersaudara.',
       color: 'from-pink-500 to-rose-500'
     },
     {
       icon: School,
       title: 'Sekolah Dasar',
-      date: '2001 - 2007',
-      location: 'SD Negeri 01 Jakarta',
-      description: 'Menyelesaikan pendidikan dasar dengan prestasi yang baik dan aktif dalam kegiatan ekstrakurikuler.',
+      date: '2016 - 2022',
+      location: 'SDN 15 Perigi Nyatuk ',
+      description: 'Menyelesaikan pendidikan dasar dengan prestasi yang baik dan aktif dalam kegiatan Pendidikan akademik.',
       color: 'from-blue-500 to-cyan-500'
     },
     {
       icon: GraduationCap,
       title: 'Sekolah Menengah Pertama',
-      date: '2007 - 2010',
-      location: 'SMP Negeri 5 Jakarta',
+      date: '2022 - 2024',
+      location: 'SMP PGRI 1 Paloh',
       description: 'Mulai tertarik dengan teknologi dan komputer. Aktif dalam klub komputer sekolah.',
       color: 'from-green-500 to-emerald-500'
     },
     {
       icon: Award,
-      title: 'Sekolah Menengah Atas',
-      date: '2010 - 2013',
-      location: 'SMA Negeri 8 Jakarta',
-      description: 'Mengambil jurusan IPA dan meraih juara 2 dalam kompetisi programming tingkat provinsi.',
+      title: 'Sekolah Menengah Kejuruan',
+      date: '2024 - Sekarang',
+      location: 'SMK Negeri 1 Paloh',
+      description: 'Mengambil jurusan DKV (Desain Komunikasi Visual) dan meraih juara 2 dalam kompetisi desainer tingkat provinsi.',
       color: 'from-purple-500 to-violet-500'
     },
     {
