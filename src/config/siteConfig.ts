@@ -231,7 +231,7 @@ export const siteConfig = {
   // Footer
   footer: {
     copyright: "© 2024 Marvell. All rights reserved.",
-    description: "Building amazing digital experiences with passion and precision."
+    description: "Membangun pengalaman digital yang menakjubkan dengan penuh semangat dan ketepatan."
   },
 
   // Colors & Theme
@@ -256,7 +256,7 @@ export const siteConfig = {
   digitalClock: {
     days: ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"],
     showDayInterval: 20000, // 20 seconds
-    showDayDuration: 5000   // 5 seconds
+    showDayDuration: 10000   // 5 seconds
   },
 
   // Animation Settings
@@ -293,8 +293,8 @@ export const siteConfig = {
     currentTrack: 0,
     popup: {
       enabled: true,
-      duration: 5000, // 5 seconds
-      animationDuration: 3000, // 3 seconds
+      duration: 10000, // 5 seconds
+      animationDuration: 13000, // 3 seconds
       showOnRefresh: true,
       position: "top-center" // top-center, top-right, etc.
     }
