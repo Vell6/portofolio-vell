@@ -282,12 +282,12 @@ export const siteConfig = {
     tracks: [
       {
         id: 1,
-        title: "Ambient Chill",
-        artist: "Relaxing Music",
-        url: "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav", // Replace with actual music URL
-        duration: "3:45",
-        thumbnail: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop",
-        description: "Perfect ambient music for browsing"
+        title: "DJ RINDU AKU RINDU KAMU JADI SATU ZEIN FVNKY",
+        artist: "DJ ZEIN FVNKY",
+        url: "https://files.catbox.moe/mxg4bo.mp4", // Replace with actual music URL
+        duration: "6:19",
+        thumbnail: "https://files.catbox.moe/z44kyn.jpg",
+        description: "DJ RINDU AKU RINDU KAMU JADI SATU ZEIN FVNKY | DJ YA OO ASIKNYA MENIKMATI MALAM VIRAL TIKTOK 2025"
       }
     ],
     currentTrack: 0,
