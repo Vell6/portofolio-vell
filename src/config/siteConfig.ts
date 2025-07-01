@@ -1,4 +1,3 @@
-
 export const siteConfig = {
   // Basic Site Information
   site: {
@@ -271,6 +270,33 @@ export const siteConfig = {
     },
     shine: {
       duration: 3000 // milliseconds
+    }
+  },
+
+  // Background Music Configuration
+  backgroundMusic: {
+    enabled: true,
+    autoplay: true,
+    loop: true,
+    volume: 0.5, // 0.0 to 1.0
+    tracks: [
+      {
+        id: 1,
+        title: "Ambient Chill",
+        artist: "Relaxing Music",
+        url: "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav", // Replace with actual music URL
+        duration: "3:45",
+        thumbnail: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop",
+        description: "Perfect ambient music for browsing"
+      }
+    ],
+    currentTrack: 0,
+    popup: {
+      enabled: true,
+      duration: 5000, // 5 seconds
+      animationDuration: 3000, // 3 seconds
+      showOnRefresh: true,
+      position: "top-center" // top-center, top-right, etc.
     }
   }
 };
