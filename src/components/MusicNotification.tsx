@@ -42,7 +42,7 @@ const MusicNotification: React.FC = () => {
   if (!isVisible || !siteConfig.backgroundMusic.enabled) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] pointer-events-none">
+    <div className="fixed inset-0 z-[99999] pointer-events-none">
       <div className="absolute top-6 left-1/2 transform -translate-x-1/2 pointer-events-auto">
         <div
           className={`
