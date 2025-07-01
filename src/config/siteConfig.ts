@@ -293,8 +293,8 @@ export const siteConfig = {
     currentTrack: 0,
     popup: {
       enabled: true,
-      duration: 10000, // 5 seconds
-      animationDuration: 13000, // 3 seconds
+      duration: 6000, // 5 seconds
+      animationDuration: 4000, // 3 seconds
       showOnRefresh: true,
       position: "top-center" // top-center, top-right, etc.
     }
