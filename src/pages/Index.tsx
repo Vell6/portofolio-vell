@@ -9,12 +9,14 @@ import Contact from '../components/Contact';
 import Footer from '../components/Footer';
 import AudioPlayer from '../components/AudioPlayer';
 import MusicNotification from '../components/MusicNotification';
+import MusicControls from '../components/MusicControls';
 
 const Index = () => {
   return (
     <div className="min-h-screen">
       <AudioPlayer />
       <MusicNotification />
+      <MusicControls />
       <Navbar />
       <main>
         <section id="home">

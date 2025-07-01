@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { siteConfig } from '@/config/siteConfig';
-import { X, Music, Play, Pause } from 'lucide-react';
+import { X, Music } from 'lucide-react';
 
 const MusicNotification: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -43,11 +43,11 @@ const MusicNotification: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-[9999] pointer-events-none">
-      <div className="absolute top-8 left-1/2 transform -translate-x-1/2 pointer-events-auto">
+      <div className="absolute top-6 left-1/2 transform -translate-x-1/2 pointer-events-auto">
         <div
           className={`
-            relative bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl
-            p-6 shadow-2xl max-w-sm w-full mx-4
+            relative bg-white/10 backdrop-blur-md border border-white/20 rounded-xl
+            p-4 shadow-2xl max-w-md w-full mx-4 h-20
             transition-all duration-[3000ms] ease-out
             ${isAnimating 
               ? 'translate-y-0 opacity-100 scale-100' 
@@ -62,69 +62,52 @@ const MusicNotification: React.FC = () => {
           }}
         >
           {/* Liquid water effect overlay */}
-          <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
+          <div className="absolute inset-0 rounded-xl overflow-hidden pointer-events-none">
             <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 via-purple-400/20 to-pink-400/20 animate-pulse"></div>
             <div className="absolute top-0 left-0 w-full h-full">
-              <div className="absolute top-2 left-4 w-6 h-6 bg-white/20 rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div>
-              <div className="absolute top-8 right-6 w-4 h-4 bg-blue-400/30 rounded-full animate-bounce" style={{ animationDelay: '1s' }}></div>
-              <div className="absolute bottom-6 left-8 w-3 h-3 bg-purple-400/30 rounded-full animate-bounce" style={{ animationDelay: '2s' }}></div>
+              <div className="absolute top-1 left-3 w-2 h-2 bg-white/20 rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div>
+              <div className="absolute top-3 right-4 w-1.5 h-1.5 bg-blue-400/30 rounded-full animate-bounce" style={{ animationDelay: '1s' }}></div>
+              <div className="absolute bottom-2 left-6 w-1 h-1 bg-purple-400/30 rounded-full animate-bounce" style={{ animationDelay: '2s' }}></div>
             </div>
           </div>
 
           {/* Close button */}
           <button
             onClick={handleClose}
-            className="absolute top-3 right-3 text-white/70 hover:text-white transition-colors duration-200 p-1 rounded-full hover:bg-white/10"
+            className="absolute top-2 right-2 text-white/70 hover:text-white transition-colors duration-200 p-1 rounded-full hover:bg-white/10"
           >
-            <X size={16} />
+            <X size={12} />
           </button>
 
           {/* Content */}
-          <div className="relative z-10">
-            <div className="flex items-start space-x-4">
+          <div className="relative z-10 h-full">
+            <div className="flex items-center space-x-3 h-full">
               <div className="flex-shrink-0">
                 <img
                   src={currentTrack.thumbnail}
                   alt={currentTrack.title}
-                  className="w-16 h-16 rounded-xl object-cover shadow-lg"
+                  className="w-12 h-12 rounded-lg object-cover shadow-lg"
                 />
               </div>
               
               <div className="flex-1 min-w-0">
-                <div className="flex items-center space-x-2 mb-1">
-                  <Music size={16} className="text-blue-400" />
-                  <span className="text-blue-400 text-sm font-medium">Now Playing</span>
+                <div className="flex items-center space-x-1 mb-1">
+                  <Music size={12} className="text-blue-400" />
+                  <span className="text-blue-400 text-xs font-medium">Now Playing</span>
                 </div>
                 
-                <h3 className="text-white font-semibold text-lg leading-tight mb-1">
+                <h3 className="text-white font-semibold text-sm leading-tight mb-1 truncate">
                   {currentTrack.title}
                 </h3>
                 
-                <p className="text-white/80 text-sm mb-2">
-                  by {currentTrack.artist}
-                </p>
-                
                 <div className="flex items-center justify-between text-white/60 text-xs">
-                  <span>Duration: {currentTrack.duration}</span>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                  <span className="truncate">by {currentTrack.artist}</span>
+                  <div className="flex items-center space-x-1 ml-2">
+                    <div className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></div>
                     <span>Auto-playing</span>
                   </div>
                 </div>
               </div>
-            </div>
-
-            {/* Description */}
-            <p className="text-white/70 text-sm mt-3 leading-relaxed">
-              {currentTrack.description}
-            </p>
-
-            {/* Progress indicator */}
-            <div className="mt-4 w-full bg-white/20 rounded-full h-1">
-              <div 
-                className="bg-gradient-to-r from-blue-400 to-purple-400 h-1 rounded-full transition-all duration-1000"
-                style={{ width: '0%' }}
-              ></div>
             </div>
           </div>
         </div>
