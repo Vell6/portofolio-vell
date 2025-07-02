@@ -1,3 +1,4 @@
+
 export const siteConfig = {
   // Basic Site Information
   site: {
@@ -293,9 +294,10 @@ export const siteConfig = {
     currentTrack: 0,
     popup: {
       enabled: true,
-      duration: 6000, // 5 seconds
-      animationDuration: 4000, // 3 seconds
+      duration: 6000, // 6 seconds
+      animationDuration: 4000, // 4 seconds
       showOnRefresh: true,
+      showInterval: 10000, // Show every 10 seconds
       position: "top-center" // top-center, top-right, etc.
     }
   }

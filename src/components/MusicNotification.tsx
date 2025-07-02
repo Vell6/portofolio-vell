@@ -6,6 +6,7 @@ import { X, Music } from 'lucide-react';
 const MusicNotification: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [showParticles, setShowParticles] = useState(false);
 
   const currentTrack = siteConfig.backgroundMusic.tracks[siteConfig.backgroundMusic.currentTrack];
   const { popup } = siteConfig.backgroundMusic;
@@ -14,30 +15,43 @@ const MusicNotification: React.FC = () => {
     if (!popup.enabled || !siteConfig.backgroundMusic.enabled) return;
 
     // Show notification on page load/refresh
-    const timer = setTimeout(() => {
-      setIsVisible(true);
-      setIsAnimating(true);
+    const initialTimer = setTimeout(() => {
+      showNotification();
     }, 500);
 
-    return () => clearTimeout(timer);
+    // Set up recurring notifications
+    const recurringTimer = setInterval(() => {
+      showNotification();
+    }, popup.showInterval);
+
+    return () => {
+      clearTimeout(initialTimer);
+      clearInterval(recurringTimer);
+    };
   }, []);
+
+  const showNotification = () => {
+    setIsVisible(true);
+    setIsAnimating(true);
+    
+    // Show particles after animation completes
+    setTimeout(() => {
+      setShowParticles(true);
+    }, 1000);
+
+    // Hide notification after duration
+    setTimeout(() => {
+      handleClose();
+    }, popup.duration);
+  };
 
   const handleClose = () => {
     setIsAnimating(false);
+    setShowParticles(false);
     setTimeout(() => {
       setIsVisible(false);
     }, popup.animationDuration);
   };
-
-  useEffect(() => {
-    if (isVisible && isAnimating) {
-      const hideTimer = setTimeout(() => {
-        handleClose();
-      }, popup.duration);
-
-      return () => clearTimeout(hideTimer);
-    }
-  }, [isVisible, isAnimating]);
 
   if (!isVisible || !siteConfig.backgroundMusic.enabled) return null;
 
@@ -48,7 +62,7 @@ const MusicNotification: React.FC = () => {
           className={`
             relative bg-white/10 backdrop-blur-md border border-white/20 rounded-xl
             p-4 shadow-2xl max-w-md w-full mx-4 h-20
-            transition-all duration-[3000ms] ease-out
+            transition-all duration-[3000ms] ease-out overflow-hidden
             ${isAnimating 
               ? 'translate-y-0 opacity-100 scale-100' 
               : '-translate-y-full opacity-0 scale-95'
@@ -61,6 +75,15 @@ const MusicNotification: React.FC = () => {
             border: '1px solid rgba(255,255,255,0.1)',
           }}
         >
+          {/* Shine Animation */}
+          <div 
+            className="absolute inset-0 bg-gradient-to-br from-transparent via-white/20 to-transparent rounded-xl"
+            style={{
+              animation: isAnimating ? 'diagonalShine 2s ease-in-out 2' : 'none',
+              transform: 'translateX(-100%) translateY(-100%)',
+            }}
+          />
+
           {/* Liquid water effect overlay */}
           <div className="absolute inset-0 rounded-xl overflow-hidden pointer-events-none">
             <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 via-purple-400/20 to-pink-400/20 animate-pulse"></div>
@@ -71,10 +94,46 @@ const MusicNotification: React.FC = () => {
             </div>
           </div>
 
+          {/* Particle Effects */}
+          {showParticles && (
+            <>
+              {/* Top particles */}
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 pointer-events-none">
+                {[...Array(8)].map((_, i) => (
+                  <div
+                    key={`top-${i}`}
+                    className="absolute w-1 h-1 bg-blue-400 rounded-full animate-bounce"
+                    style={{
+                      left: `${(i - 4) * 12}px`,
+                      animationDelay: `${i * 100}ms`,
+                      animationDuration: '1s',
+                      opacity: 0.7,
+                    }}
+                  />
+                ))}
+              </div>
+              
+              {/* Bottom particles */}
+              <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 pointer-events-none">
+                {[...Array(8)].map((_, i) => (
+                  <div
+                    key={`bottom-${i}`}
+                    className="absolute w-1 h-1 bg-purple-400 rounded-full"
+                    style={{
+                      left: `${(i - 4) * 12}px`,
+                      animation: `particleFloat 1.5s ease-out ${i * 100}ms`,
+                      opacity: 0.7,
+                    }}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+
           {/* Close button */}
           <button
             onClick={handleClose}
-            className="absolute top-2 right-2 text-white/70 hover:text-white transition-colors duration-200 p-1 rounded-full hover:bg-white/10"
+            className="absolute top-2 right-2 text-white/70 hover:text-white transition-colors duration-200 p-1 rounded-full hover:bg-white/10 z-10"
           >
             <X size={12} />
           </button>
@@ -112,6 +171,41 @@ const MusicNotification: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* CSS Animations */}
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          @keyframes diagonalShine {
+            0% { 
+              transform: translateX(-150%) translateY(-150%); 
+              opacity: 0; 
+            }
+            50% { 
+              transform: translateX(0%) translateY(0%); 
+              opacity: 1; 
+            }
+            100% { 
+              transform: translateX(150%) translateY(150%); 
+              opacity: 0; 
+            }
+          }
+          
+          @keyframes particleFloat {
+            0% { 
+              transform: translateY(0px) scale(1); 
+              opacity: 0.7; 
+            }
+            50% { 
+              transform: translateY(-8px) scale(1.2); 
+              opacity: 1; 
+            }
+            100% { 
+              transform: translateY(-16px) scale(0.8); 
+              opacity: 0; 
+            }
+          }
+        `
+      }} />
     </div>
   );
 };

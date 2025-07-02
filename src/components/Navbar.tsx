@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Menu, X, Sun, Moon } from 'lucide-react';
+
+import React, { useState, useEffect, useRef } from 'react';
+import { Menu, X, Sun, Moon, Play, Pause, VolumeX } from 'lucide-react';
 import DigitalClock from './DigitalClock';
 
 const Navbar = () => {
@@ -7,6 +8,9 @@ const Navbar = () => {
   const [isDark, setIsDark] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,9 +26,60 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    // Find the audio element created by AudioPlayer
+    const audio = document.querySelector('audio');
+    audioRef.current = audio;
+
+    if (audio) {
+      const updatePlayingState = () => {
+        setIsPlaying(!audio.paused);
+      };
+
+      audio.addEventListener('play', updatePlayingState);
+      audio.addEventListener('pause', updatePlayingState);
+      audio.addEventListener('loadstart', updatePlayingState);
+
+      // Initial state
+      updatePlayingState();
+
+      return () => {
+        audio.removeEventListener('play', updatePlayingState);
+        audio.removeEventListener('pause', updatePlayingState);
+        audio.removeEventListener('loadstart', updatePlayingState);
+      };
+    }
+  }, []);
+
   const toggleTheme = () => {
     setIsDark(!isDark);
     document.documentElement.classList.toggle('dark');
+  };
+
+  const togglePlayPause = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play().catch(error => {
+          console.log('Play failed:', error);
+        });
+      }
+    }
+  };
+
+  const stopMusic = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+  };
+
+  const toggleMute = () => {
+    if (audioRef.current) {
+      audioRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
   };
 
   const navItems = [
@@ -176,7 +231,7 @@ const Navbar = () => {
         {/* Mobile Menu */}
         <div
           className={`md:hidden overflow-hidden transition-all duration-300 ${
-            isOpen ? 'max-h-80 opacity-100' : 'max-h-0 opacity-0'
+            isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
           }`}
         >
           <div className="py-4 space-y-2 bg-white/10 dark:bg-gray-900/10 backdrop-blur-xl rounded-2xl mt-2 border border-white/20 dark:border-gray-700/20 relative z-10 shadow-xl">
@@ -193,6 +248,35 @@ const Navbar = () => {
                 {item.name}
               </a>
             ))}
+            
+            {/* Music Controls in Mobile Menu */}
+            <div className="px-6 py-3 border-t border-white/20 dark:border-gray-700/20 mt-2">
+              <div className="text-gray-700 dark:text-gray-300 font-medium mb-2">Music Controls</div>
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={togglePlayPause}
+                  className="flex items-center space-x-2 px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors duration-200 text-gray-700 dark:text-gray-300"
+                >
+                  {isPlaying ? <Pause size={16} /> : <Play size={16} />}
+                  <span className="text-sm">{isPlaying ? 'Pause' : 'Play'}</span>
+                </button>
+                
+                <button
+                  onClick={stopMusic}
+                  className="px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors duration-200 text-gray-700 dark:text-gray-300 text-sm"
+                >
+                  Stop
+                </button>
+                
+                <button
+                  onClick={toggleMute}
+                  className="flex items-center space-x-2 px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors duration-200 text-gray-700 dark:text-gray-300"
+                >
+                  <VolumeX size={16} />
+                  <span className="text-sm">{isMuted ? 'Unmute' : 'Mute'}</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
